@@ -127,9 +127,11 @@ def generate(a=[]*200,b=[]*200,c=[]*200):  # generates rank list
             print q,b[i],'    ',c[i]
             print ''
 
-for i in xrange(1301106000,1301106608): # iterator, address
+for i in xrange(1301106000,1301106608): # iterator
 
-    page=requests.get("http://results.bput.ac.in/398_RES/%s.html"%str(i))
+    page=requests.get("http://results.bput.ac.in/398_RES/%s.html"%str(i)) # address
+
+    #change the value of the address and the iterator to get the desired results
 
     tree=html.fromstring(page.text)
 
