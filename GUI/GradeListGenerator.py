@@ -5,19 +5,29 @@ import requests
 from Tkinter import *
 import math
 from collections import *
+import os
+import tkMessageBox
 
 # copying legacy code over a year back.. sucks 
 
-def getLimit():
-    try:
-        a,b = map(int,raw_input().split())
-        return b-a
-    except EOFError:
-        app2 = Tkinter.Tk()
-        app2.withdraw()
-        tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
-        return 0
-        
+def getLimit(path):
+    cnt = 0
+    foo = os.open(path,os.O_RDWR|os.O_CREAT)
+    sys.stdin = open(path,'r')
+    while True:
+        try:
+            r = raw_input()
+            cnt += 1
+        except EOFError:
+            sys.stdin.close()
+            os.close(foo)
+            if cnt == 0:
+                app2 = Tkinter.Tk()
+                app2.withdraw()
+                tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
+                return 0
+            return cnt
+
 class Redir(object): #redirects stdout to text box
 
     def __init__(self, text_area):
@@ -157,10 +167,14 @@ def generate(grades):
             print '                               '+j+ ': '+str(value[i][j])
         print '                        '+'--------------------'
 
+number = -1
 def calculateGrade(path):
     ctr=[0]*10
+    number = getLimit(path)-1
+    foo = os.open(path,os.O_RDWR|os.O_CREAT)
     sys.stdin = open(path,'r')
-    number = getLimit()
+    if number != -1:
+        useless = raw_input()
     for i in range(number): # iterator
         foo = map(str,raw_input().split())
         ff = True
@@ -245,9 +259,10 @@ def calculateGrade(path):
                 barch.r[ctr[9]]=roll
                 barch,g[ctr[9]]=grade
 
-def displayGrade():
+def displayGrade(path):
     app11=Tkinter.Tk()
-    if number == 0:
+    number = getLimit(path)-1
+    if number == -1:
         app11.withdraw()
     sb=Scrollbar(app11)
     tb=Text(app11,height=36,width=74)
@@ -355,4 +370,3 @@ def displayGrade():
 
     app11.title("Grade List")
     app11.mainloop()
-
