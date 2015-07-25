@@ -7,16 +7,25 @@ import requests
 from Tkinter import *
 import math
 import tkMessageBox
+import os
 
-def getLimit():
-    try:
-        a,b = map(int,raw_input().split())
-        return b-a
-    except EOFError:
-        app2 = Tkinter.Tk()
-        app2.withdraw()
-        tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
-        return 0
+def getLimit(path):
+    cnt = 0
+    foo = os.open(path,os.O_RDWR|os.O_CREAT)
+    sys.stdin = open(path,'r')
+    while True:
+        try:
+            r = raw_input()
+            cnt += 1
+        except EOFError:
+            sys.stdin.close()
+            os.close(foo)
+            if cnt == 0:
+                app2 = Tkinter.Tk()
+                app2.withdraw()
+                tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
+                return 0
+            return cnt
 
 class Redir(object): #redirects stdout to text box
 
@@ -172,12 +181,15 @@ def generate(a=[]*200,b=[]*200,c=[]*200):  # generates rank list
                q+=' '
             print q,b[i],'    ',c[i]
             print ''
-number = 0
+number = -1
 def calculateRank(path):
     ctr=[0]*10
     resetList()
+    number = getLimit(path)-1
+    foo = os.open(path,os.O_RDWR|os.O_CREAT)
     sys.stdin = open(path,'r')
-    number = getLimit()
+    if number != -1:
+        useless = raw_input()
     for i in range(number): # iterator
         foo = map(str,raw_input().split())
         ff = True
@@ -252,10 +264,11 @@ def calculateRank(path):
                 barch.n[ctr[9]]=name
                 barch.s[ctr[9]]=sgpa
                 barch.r[ctr[9]]=roll
-def displayRank():
+def displayRank(path):
 
     app11=Tkinter.Tk()
-    if number == 0:
+    number = getLimit(path)-1
+    if number == -1:
         app11.withdraw()
         
     sb=Scrollbar(app11)
@@ -373,4 +386,3 @@ def displayRank():
 
     app11.title("Rank List")
     app11.mainloop()
-
