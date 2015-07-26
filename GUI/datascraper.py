@@ -7,10 +7,16 @@ import requests
 from Tkinter import *
 import math
 import tkMessageBox
+import os
 # import rank_generator
 # import rankGenUI
 
 number = 0
+ind = ["MECHANICAL ENGINEERING ","ELECTRICAL ENGINEERING ","CIVIL ENGINEERING ","INSTRUMENTATION & ELECTRONICS ENGINEERING "\
+,"COMPUTER SCIENCE & ENGINEERING ","BIO TECHNOLOGY ","INFORMATION TECHNOLOGY ","TEXTILE ENGINEERING ","FASHION TECHNOLOGY "]
+visited = [False]*len(ind)
+
+subjects = [['nothing' for i in range(6)]for i in range(len(ind))]
 
 def formatting(a,b,c,d,e):
     ans = a + ' '*(30 - len(a)) + b + ' '*5 + c + ' '*(45 - len(c)) + d+'          '+e
@@ -18,6 +24,7 @@ def formatting(a,b,c,d,e):
 
 def show(n,a,path): # iterator, address
     try:
+        f = os.open(path,os.O_WRONLY|os.O_APPEND|os.O_CREAT)
         sys.stdout = open(path,'a')
         i = n
         add = a
@@ -37,14 +44,28 @@ def show(n,a,path): # iterator, address
             sgpa = []
             sgpa=tree.xpath("/html/body/table/tr[5]/td/table/tr[%s]/td[3]/text()"%str(max(count)+2))
 
+        if name and sgpa:
+            if branch[0] == "ELECTRONICS AND INSTRUMENTATION ENGINEERING. ":
+                branch[0] = "INSTRUMENTATION & ELECTRONICS ENGINEERING "
+
+
         grades = tree.xpath("/html/body/table/tr[5]/td/table/tr[position() > 1 and position() < 8]/td[5]/text()")
+        sub = tree.xpath("/html/body/table/tr[5]/td/table/tr[position() > 1 and position() < 8]/td[3]/text()")
         grades = ''.join(grades)
-        # if name and sgpa:   # by checking for both name and sgpa, we can be sure to filter all empty nodes
-        #     print name[0],roll[0],branch[0],sgpa[0]
-        #     number += 1
+
+        if name and sgpa:
+            res = ind.index(branch[0]+' ')
+            if not visited[res]:
+                visited[res] = True
+                for x in range(6):
+                    subjects[res][x] = sub[x]
+
+
+       
         if name and sgpa:
             print name[0],roll[0],branch[0],sgpa[0],grades
             sys.stdout.close()
+            os.close(f)
             ans = formatting(name[0],roll[0],branch[0],sgpa[0],grades)
             return ans
         else:
@@ -55,4 +76,13 @@ def show(n,a,path): # iterator, address
         tkMessageBox.showinfo("Error",'No Internet Connection')
         return '-1'
 
-# show(1301106000,1301106100,'input.txt')
+def getSubject(path):
+    f = os.open(path,os.O_WRONLY|os.O_APPEND|os.O_CREAT)
+    sys.stdout = open(path,'w')
+    for i in subjects:
+        for j in i:
+            j = j.replace(' ','-')
+            print j,
+        print
+    sys.stdout.close()
+    os.close(f)
