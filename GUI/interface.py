@@ -186,6 +186,8 @@ def getList():
 		genGrade.config(state = NORMAL,fg = 'green',activeforeground = 'green')
 	else:
 		listBox.delete(1.0,END)
+	path2 = menuVar.get()+'sub.txt'
+	rankApp.getSubject(path2)
 
 def getRank():
 	from rank_generator import calculateRank,displayRank
@@ -196,12 +198,16 @@ def getRank():
 	displayRank(path)
 
 def getGrade():
-	from rankGrade1 import calculateGrade,displayGrade
+	from rankGrade1 import calculateGrade,displayGrade,getSubjectData
 	begin = int(startRoll.get())
 	end = int(endRoll.get())
+
 	path = menuVar.get()+'.txt'
+	path2 = menuVar.get()+'sub.txt'
+	getSubjectData(path2)
 	calculateGrade(path)
 	displayGrade(path)
+
 
 def ModFile():
 	if editFile.config('text')[-1] == 'Save File':
@@ -273,3 +279,4 @@ clrFile.grid(row = 17, column = 1)
 app.geometry('1275x500')
 app.resizable(width = False, height = False)
 app.mainloop()
+
