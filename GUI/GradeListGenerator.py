@@ -27,6 +27,27 @@ def getLimit(path):
                 tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
                 return 0
             return cnt
+subjects = [['nothing' for i in range(6)]for i in range(9)]
+
+def getSubjectData(path):
+    foo = os.open(path,os.O_RDWR|os.O_CREAT)
+    sys.stdin = open(path,'r')
+    cnt = 0
+    while True:
+        try:
+            r = map(str,raw_input().split())
+            for i in range(len(r)):
+                subjects[cnt][i] = r[i]
+            cnt += 1
+        except EOFError:
+            sys.stdin.close()
+            os.close(foo)
+            if cnt == 0:
+                app2 = Tkinter.Tk()
+                app2.withdraw()
+                tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
+                return 0
+            return cnt
 
 class Redir(object): #redirects stdout to text box
 
@@ -98,6 +119,7 @@ class barch: # for architecture
     g=[""]*200
 
 def resetList():
+    subjects = [['nothing' for i in range(6)]for i in range(9)]
     mech.n = ['']*200
     mech.r = ['']*200
     mech.s = ['']*200
@@ -143,15 +165,14 @@ def resetList():
     ft.s = ['']*200
     ft.g = ['']*200
 
+
+
 # space for adding those branches i missed
 
 ctr=[0]*10   # iterator used in same order as classes
 number = 0
 
-def getSubjects(roll):
-    pass
-
-def generate(grades):
+def generate(grades,code):
     value = OrderedDict()
 
     for i in range(6):
@@ -163,9 +184,12 @@ def generate(grades):
             ctr += 1
 
     for i in range(6):
+        print subjects[code][i]
+        print 
+        print
         for j in value[i]:
             print '                               '+j+ ': '+str(value[i][j])
-        print '                        '+'--------------------'
+        print '            '+'-----------------------------------'
 
 number = -1
 def calculateGrade(path):
@@ -259,6 +283,7 @@ def calculateGrade(path):
                 barch.r[ctr[9]]=roll
                 barch,g[ctr[9]]=grade
 
+
 def displayGrade(path):
     app11=Tkinter.Tk()
     number = getLimit(path)-1
@@ -278,7 +303,7 @@ def displayGrade(path):
         print '                       MECHANICAL  ENGINEERING'
         print
         print
-        generate(mech.g)
+        generate(mech.g,0)
         #tb.config(state=DISABLED)
 
     def list_elec():
@@ -287,7 +312,7 @@ def displayGrade(path):
         print '                           ELECTRICAL  ENGINEERING'
         print
         print
-        generate(elec.g)
+        generate(elec.g,1)
         #tb.config(state=DISABLED)
 
     def list_civil():
@@ -296,7 +321,7 @@ def displayGrade(path):
         print '                               CIVIL  ENGINEERING'
         print
         print
-        generate(civil.g)
+        generate(civil.g,2)
         #tb.config(state=DISABLED)
 
     def list_ie():
@@ -305,7 +330,7 @@ def displayGrade(path):
         print '                ELECTRONICS AND INSTRUMENTATION ENGINEERING'
         print
         print
-        generate(inst.g)
+        generate(inst.g,3)
         #tb.config(state=DISABLED)
 
     def list_cse():
@@ -314,7 +339,7 @@ def displayGrade(path):
         print '                   COMPUTER SCIENCE AND  ENGINEERING'
         print
         print
-        generate(cse.g)
+        generate(cse.g,4)
 
         #tb.config(state=DISABLED)
     def list_biot():
@@ -323,7 +348,7 @@ def displayGrade(path):
         print '                              BIO TECHNOLOGY'
         print
         print
-        generate(biot.g)
+        generate(biot.g,5)
         #tb.config(state=DISABLED)
 
     def list_it():
@@ -332,7 +357,7 @@ def displayGrade(path):
         print '                      INFORMATION TECHNOLOGY'
         print
         print
-        generate(it.g)
+        generate(it.g,6)
         #tb.config(state=DISABLED)
 
     def list_tex():
@@ -341,7 +366,7 @@ def displayGrade(path):
         print '                       TEXTILE  ENGINEERING'
         print
         print
-        generate(tex.g)
+        generate(tex.g,7)
         #tb.config(state=DISABLED)
 
     def list_ft():
@@ -350,7 +375,7 @@ def displayGrade(path):
         print '                        FASHION TECHNOLOGY'
         print
         print
-        generate(ft.g)
+        generate(ft.g,8)
         #tb.config(state=DISABLED)
 
     bb0= Menubutton(app11,text="Select Branch",relief=RAISED)
@@ -370,3 +395,4 @@ def displayGrade(path):
 
     app11.title("Grade List")
     app11.mainloop()
+
