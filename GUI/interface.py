@@ -15,11 +15,11 @@ app.config(bg = '#708090')
 app.title("Rank Generator")
 
 files = ['file1','file2','file3','file4','file5','file6']
-tmp = []
-for i in files:
-	tmp.append(i+'sub')
-files += tmp
-del tmp
+# tmp = []
+# for i in files:
+# 	tmp.append(i+'sub')
+# files += tmp
+# del tmp
 menuVar = StringVar(app)
 menuVar.set(files[0])
 ProgVar = IntVar(app)
@@ -250,6 +250,10 @@ def clrFile():
 Grid.rowconfigure(app,0,weight = 1)
 Grid.columnconfigure(app,0,weight = 1)
 
+"""
+Start of buttons
+"""
+
 Label(app, text = 'Digit of URL', font = ('Times New Roman',14,"bold"),fg = 'white', bg = 'maroon',relief = RAISED).grid(row = 2, column = 2)
 Label(app, text = '      Start Roll     ', font = ('Times New Roman',14,'bold'), fg = 'white',bg = 'maroon',relief = RAISED).grid(row = 4, column = 1)
 Label(app, text = '     End Roll     ', font = ('Times New Roman', 14,'bold'), fg = 'white',bg = 'maroon',relief = RAISED).grid(row = 4, column = 3)
@@ -330,5 +334,6 @@ clrFile.grid(row = 17, column = 1)
 listBox.grid_remove()
 
 # app.geometry('1375x500')
-# app.resizable(width = False, height = False)
+app.resizable(width = False, height = False)
 app.mainloop()
+
