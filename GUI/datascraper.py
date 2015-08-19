@@ -14,10 +14,10 @@ import time
 
 number = 0
 ind = ["MECHANICAL ENGINEERING ","ELECTRICAL ENGINEERING ","CIVIL ENGINEERING ","INSTRUMENTATION & ELECTRONICS ENGINEERING "\
-,"COMPUTER SCIENCE & ENGINEERING ","BIO TECHNOLOGY ","INFORMATION TECHNOLOGY ","TEXTILE ENGINEERING ","FASHION TECHNOLOGY "]
+,"COMPUTER SCIENCE & ENGINEERING ","BIO TECHNOLOGY ","INFORMATION TECHNOLOGY ","TEXTILE ENGINEERING ","FASHION TECHNOLOGY ","BACHELOR OF ARCHITECTURE "]
 visited = [False]*len(ind)
 
-subjects = [[]for i in range(9)]
+subjects = [[]for i in range(len(ind))]
 
 def formatting(a,b,c,d,e):
     ans = '                                                       Generated   ' + b + '   ' + u"\u2713"
