@@ -9,6 +9,8 @@ import math
 import tkMessageBox
 import os
 
+flag = True
+
 def getLimit(path):
     cnt = 0
     foo = os.open(path,os.O_RDWR|os.O_CREAT)
@@ -20,7 +22,8 @@ def getLimit(path):
         except EOFError:
             sys.stdin.close()
             os.close(foo)
-            if cnt == 0:
+            if cnt == 0 or cnt == 1:
+                flag = False
                 app2 = Tkinter.Tk()
                 app2.withdraw()
                 tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
@@ -123,9 +126,13 @@ def resetList():
     ft.r = ['']*200
     ft.s = ['']*200
 
+    barch.n = ['']*200
+    barch.r = ['']*200
+    barch.s = ['']*200
+
 # space for adding those branches i missed
 
-ctr=[0]*10   # iterator used in same order as classes
+ctr=[0]*11   # iterator used in same order as classes
 
 def selsort(a=[]*200,b=[]*200,c=[]*200):
     for i in range(len(c)-1):
@@ -260,17 +267,14 @@ def calculateRank(path):
                 ft.s[ctr[8]]=sgpa
                 ft.r[ctr[8]]=roll
                 ctr[8]+=1
-            if branch=="ARCHITECTURE ":
+            if branch=="BACHELOR OF ARCHITECTURE ":
                 barch.n[ctr[9]]=name
                 barch.s[ctr[9]]=sgpa
                 barch.r[ctr[9]]=roll
+                ctr[9] += 1
 def displayRank(path):
 
     app11=Tkinter.Tk()
-    number = getLimit(path)-1
-    if number == -1:
-        app11.withdraw()
-        
     sb=Scrollbar(app11)
     tb=Text(app11,height=36,width=74)
     sb.pack(side=RIGHT,fill=Y)
@@ -282,7 +286,7 @@ def displayRank(path):
     def list_mech():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                       MECHANICAL  ENGINEERING'
+        print '                          MECHANICAL  ENGINEERING'
         print
         print
         selsort(mech.n,mech.r,mech.s)
@@ -292,7 +296,7 @@ def displayRank(path):
     def list_elec():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                           ELECTRICAL  ENGINEERING'
+        print '                            ELECTRICAL  ENGINEERING'
         print
         print
         selsort(elec.n,elec.r,elec.s)
@@ -302,7 +306,7 @@ def displayRank(path):
     def list_civil():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                               CIVIL  ENGINEERING'
+        print '                            CIVIL  ENGINEERING'
         print
         print
         selsort(civil.n,civil.r,civil.s)
@@ -322,7 +326,7 @@ def displayRank(path):
     def list_cse():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                   COMPUTER SCIENCE AND  ENGINEERING'
+        print '                    COMPUTER SCIENCE AND  ENGINEERING'
         print
         print
         selsort(cse.n,cse.r,cse.s)
@@ -342,7 +346,7 @@ def displayRank(path):
     def list_it():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                      INFORMATION TECHNOLOGY'
+        print '                         INFORMATION TECHNOLOGY'
         print
         print
         selsort(it.n,it.r,it.s)
@@ -352,7 +356,7 @@ def displayRank(path):
     def list_tex():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                       TEXTILE  ENGINEERING'
+        print '                         TEXTILE  ENGINEERING'
         print
         print
         selsort(tex.n,tex.r,tex.s)
@@ -362,11 +366,21 @@ def displayRank(path):
     def list_ft():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                        FASHION TECHNOLOGY'
+        print '                          FASHION TECHNOLOGY'
         print
         print
         selsort(ft.n,ft.r,ft.s)
         generate(ft.n,ft.r,ft.s)
+        #tb.config(state=DISABLED)
+
+    def list_barch():
+        tb.config(state=NORMAL)
+        tb.delete(1.0,END)
+        print '                                   ARCHITECTURE'
+        print
+        print
+        selsort(barch.n,barch.r,barch.s)
+        generate(barch.n,barch.r,barch.s)
         #tb.config(state=DISABLED)
 
     bb0= Menubutton(app11,text="Select Branch",relief=RAISED)
@@ -382,6 +396,7 @@ def displayRank(path):
     bb0.menu.add_command(label="Information Technology",command=list_it)
     bb0.menu.add_command(label="Textile",command=list_tex)
     bb0.menu.add_command(label="Fashion",command=list_ft)
+    bb0.menu.add_command(label="Architecture",command=list_barch)
     bb0.pack()
 
     app11.title("Rank List")
