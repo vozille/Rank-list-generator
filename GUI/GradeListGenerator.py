@@ -21,13 +21,13 @@ def getLimit(path):
         except EOFError:
             sys.stdin.close()
             os.close(foo)
-            if cnt == 0:
+            if cnt == 0 or cnt == 1:
                 app2 = Tkinter.Tk()
                 app2.withdraw()
                 tkMessageBox.showinfo("Error",'File is empty. Generate List before proceeding')
                 return 0
             return cnt
-subjects = [['nothing' for i in range(6)]for i in range(9)]
+subjects = [[]for i in range(10)]
 
 def getSubjectData(path):
     foo = os.open(path,os.O_RDWR|os.O_CREAT)
@@ -37,7 +37,7 @@ def getSubjectData(path):
         try:
             r = map(str,raw_input().split())
             for i in range(len(r)):
-                subjects[cnt][i] = r[i]
+                subjects[cnt].append(r[i])
             cnt += 1
         except EOFError:
             sys.stdin.close()
@@ -119,7 +119,7 @@ class barch: # for architecture
     g=[""]*200
 
 def resetList():
-    subjects = [['nothing' for i in range(6)]for i in range(9)]
+    subjects = [[]for i in range(9)]
     mech.n = ['']*200
     mech.r = ['']*200
     mech.s = ['']*200
@@ -165,6 +165,12 @@ def resetList():
     ft.s = ['']*200
     ft.g = ['']*200
 
+    barch.n = ['']*200
+    barch.r = ['']*200
+    barch.s = ['']*200
+    barch.g = ['']*200
+
+
 
 
 # space for adding those branches i missed
@@ -174,8 +180,9 @@ number = 0
 
 def generate(grades,code):
     value = OrderedDict()
+    n = len(subjects[code])
 
-    for i in range(6):
+    for i in range(n):
         value[i] = OrderedDict([('O',0),('E',0),('A',0),('B',0),('C',0),('D',0),('F',0),('S',0)])
     for i in range(len(grades)):
         ctr = 0
@@ -183,7 +190,7 @@ def generate(grades,code):
             value[ctr][j] += 1
             ctr += 1
 
-    for i in range(6):
+    for i in range(n):
         print subjects[code][i]
         print 
         print
@@ -277,18 +284,16 @@ def calculateGrade(path):
                 ft.r[ctr[8]]=roll
                 ft.r[ctr[8]]=grade
                 ctr[8]+=1
-            if branch=="ARCHITECTURE ":
+            if branch=="BACHELOR OF ARCHITECTURE ":
                 barch.n[ctr[9]]=name
                 barch.s[ctr[9]]=sgpa
                 barch.r[ctr[9]]=roll
-                barch,g[ctr[9]]=grade
+                barch.g[ctr[9]]=grade
+                ctr[9] += 1
 
 
 def displayGrade(path):
     app11=Tkinter.Tk()
-    number = getLimit(path)-1
-    if number == -1:
-        app11.withdraw()
     sb=Scrollbar(app11)
     tb=Text(app11,height=36,width=74)
     sb.pack(side=RIGHT,fill=Y)
@@ -300,28 +305,31 @@ def displayGrade(path):
     def list_mech():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                       MECHANICAL  ENGINEERING'
+        print '                          MECHANICAL  ENGINEERING'
         print
         print
         generate(mech.g,0)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     def list_elec():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                           ELECTRICAL  ENGINEERING'
+        print '                            ELECTRICAL  ENGINEERING'
         print
         print
         generate(elec.g,1)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     def list_civil():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                               CIVIL  ENGINEERING'
+        print '                            CIVIL  ENGINEERING'
         print
         print
         generate(civil.g,2)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     def list_ie():
@@ -331,16 +339,17 @@ def displayGrade(path):
         print
         print
         generate(inst.g,3)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     def list_cse():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                   COMPUTER SCIENCE AND  ENGINEERING'
+        print '                    COMPUTER SCIENCE AND  ENGINEERING'
         print
         print
         generate(cse.g,4)
-
+        tb.see(1.0)
         #tb.config(state=DISABLED)
     def list_biot():
         tb.config(state=NORMAL)
@@ -349,33 +358,47 @@ def displayGrade(path):
         print
         print
         generate(biot.g,5)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     def list_it():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                      INFORMATION TECHNOLOGY'
+        print '                         INFORMATION TECHNOLOGY'
         print
         print
         generate(it.g,6)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     def list_tex():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                       TEXTILE  ENGINEERING'
+        print '                         TEXTILE  ENGINEERING'
         print
         print
         generate(tex.g,7)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     def list_ft():
         tb.config(state=NORMAL)
         tb.delete(1.0,END)
-        print '                        FASHION TECHNOLOGY'
+        print '                          FASHION TECHNOLOGY'
         print
         print
         generate(ft.g,8)
+        tb.see(1.0)
+        #tb.config(state=DISABLED)
+
+    def list_barch():
+        tb.config(state=NORMAL)
+        tb.delete(1.0,END)
+        print '                                   ARCHITECTURE'
+        print
+        print
+        generate(barch.g,9)
+        tb.see(1.0)
         #tb.config(state=DISABLED)
 
     bb0= Menubutton(app11,text="Select Branch",relief=RAISED)
@@ -391,8 +414,8 @@ def displayGrade(path):
     bb0.menu.add_command(label="Information Technology",command=list_it)
     bb0.menu.add_command(label="Textile",command=list_tex)
     bb0.menu.add_command(label="Fashion",command=list_ft)
+    bb0.menu.add_command(label="Architecture",command=list_barch)
     bb0.pack()
 
     app11.title("Grade List")
     app11.mainloop()
-
